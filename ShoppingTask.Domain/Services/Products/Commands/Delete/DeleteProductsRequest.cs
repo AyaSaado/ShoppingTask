@@ -1,7 +1,6 @@
-﻿
-namespace ShoppingTask.Domain.Services.Products;
+﻿namespace ShoppingTask.Domain.Services.Products;
 
 public class DeleteProductsRequest : IRequest<Result>
 {
-    public List<int> ProductIds { get; set; } = new List<int>();                
+    public List<int> ProductIds { get; set; } = new List<int>();
 }

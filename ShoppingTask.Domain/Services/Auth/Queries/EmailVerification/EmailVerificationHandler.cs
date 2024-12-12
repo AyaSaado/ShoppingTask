@@ -1,13 +1,16 @@
-﻿
-
-using System.Net.Mail;
+﻿using System.Net.Mail;
 
 namespace ShoppingTask.Domain.Services.Auth;
 
-public class EmailVerificationHandler(IMailService mailService) : IRequestHandler<EmailVerificationRequest, Result<string?>>
+public class EmailVerificationHandler(IMailService mailService)
+    : IRequestHandler<EmailVerificationRequest, Result<string?>>
 {
     private readonly IMailService _mailService = mailService;
-    public async Task<Result<string?>> Handle(EmailVerificationRequest request, CancellationToken cancellationToken)
+
+    public async Task<Result<string?>> Handle(
+        EmailVerificationRequest request,
+        CancellationToken cancellationToken
+    )
     {
         //Pre-SignUp Step
         try
@@ -19,7 +22,12 @@ public class EmailVerificationHandler(IMailService mailService) : IRequestHandle
                 // Check if the email address ends with "@gmail.com"
                 if (!EmailVer.Address.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
                 {
-                    return Result.Failure<string?>(new Error("400", "Email Address must be a Gmail address (ending with @gmail.com)"));
+                    return Result.Failure<string?>(
+                        new Error(
+                            "400",
+                            "Email Address must be a Gmail address (ending with @gmail.com)"
+                        )
+                    );
                 }
             }
             catch (Exception)
@@ -40,7 +48,7 @@ public class EmailVerificationHandler(IMailService mailService) : IRequestHandle
             await _mailService.SendEmail(Email);
 
             return code;
-            // return code to client side to compare it with value assigned by user  
+            // return code to client side to compare it with value assigned by user
         }
         catch (Exception ex)
         {

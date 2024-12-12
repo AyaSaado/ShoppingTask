@@ -10,5 +10,4 @@ public class Product
     public string? ImageUrl { get; set; }
     public bool IsDeleted { get; set; }
     public List<OrderItem> OrderItems { get; set; } = new();
-
 }

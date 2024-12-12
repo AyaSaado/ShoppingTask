@@ -4,4 +4,3 @@ public class EmailVerificationRequest : IRequest<Result<string?>>
 {
     public string Email { get; set; } = null!;
 }
-

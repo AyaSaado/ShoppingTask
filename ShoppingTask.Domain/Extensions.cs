@@ -1,9 +1,7 @@
-﻿
-namespace ShoppingTask.Domain;
+﻿namespace ShoppingTask.Domain;
 
 public static class Extensions
 {
-    
     public static string GenerateRandomString(int stringlen)
     {
         Random rand = new Random();
@@ -20,11 +18,10 @@ public static class Extensions
     }
 
     public static async Task<PaginationResponseDTO<T>> PaginateAsync<T>(
-       this IQueryable<T> source,
+        this IQueryable<T> source,
         CancellationToken cancellationToken,
         int page = 1,
         int size = 10
-        
     )
         where T : class
     {
@@ -38,12 +35,9 @@ public static class Extensions
             size = 10;
         }
         var total = await source.CountAsync(cancellationToken);
-        var pages = (int) Math.Ceiling((decimal)total / size);
-        var result =await source.Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken); // Materialize the sequence
+        var pages = (int)Math.Ceiling((decimal)total / size);
+        var result = await source.Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken); // Materialize the sequence
 
         return new PaginationResponseDTO<T>(Values: result, Pages: pages);
     }
-
-    
-
 }

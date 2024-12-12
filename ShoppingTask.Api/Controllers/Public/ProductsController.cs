@@ -4,7 +4,7 @@ namespace ZoumouroudOrders.API.Controllers.Public;
 
 [Route("api/public/[controller]")]
 [ApiController]
-// Anonymous Users Can Use it 
+// Anonymous Users Can Use it
 
 public class ProductsController(IMediator mediator) : ControllerBase
 {
@@ -13,7 +13,10 @@ public class ProductsController(IMediator mediator) : ControllerBase
     [HttpGet("Get")]
     [SwaggerResponse(StatusCodes.Status200OK, null, typeof(GetProductByIdResponse))]
     [SwaggerResponse(StatusCodes.Status404NotFound, null, typeof(Error))]
-    public async Task<IActionResult> Get([FromQuery] GetProductByIdRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get(
+        [FromQuery] GetProductByIdRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var response = await _mediator.Send(request, cancellationToken);
 
@@ -23,14 +26,18 @@ public class ProductsController(IMediator mediator) : ControllerBase
         return Ok(response.Value);
     }
 
-
     [HttpGet("Filter")]
-    [SwaggerResponse(StatusCodes.Status200OK, null, typeof(PaginationResponseDTO<FilterProductsResponse>))]
-    public async Task<IActionResult> Filter([FromQuery] FilterProductsRequest request ,CancellationToken cancellationToken)
+    [SwaggerResponse(
+        StatusCodes.Status200OK,
+        null,
+        typeof(PaginationResponseDTO<FilterProductsResponse>)
+    )]
+    public async Task<IActionResult> Filter(
+        [FromQuery] FilterProductsRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
     }
-
- 
 }

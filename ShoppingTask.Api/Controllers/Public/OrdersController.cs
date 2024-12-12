@@ -4,25 +4,34 @@ namespace ShoppingTask.Api.Controllers.Public;
 
 [Route("api/public/[controller]")]
 [ApiController]
-[Authorize]  
-// Can Access it By All Authenticated User 
+[Authorize]
+// Can Access it By All Authenticated User
 public class OrdersController(IMediator mediator) : ControllerBase
 {
     private readonly IMediator _mediator = mediator;
 
     [HttpGet("GetAllByUser")]
-    [SwaggerResponse(StatusCodes.Status200OK, null, typeof(PaginationResponseDTO<GetAllByUserResponse>))]
-    public async Task<IActionResult> Get([FromQuery] GetAllByUserRequest request, CancellationToken cancellationToken)
+    [SwaggerResponse(
+        StatusCodes.Status200OK,
+        null,
+        typeof(PaginationResponseDTO<GetAllByUserResponse>)
+    )]
+    public async Task<IActionResult> Get(
+        [FromQuery] GetAllByUserRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var response = await _mediator.Send(request, cancellationToken);
 
         return Ok(response);
     }
 
-
     [HttpGet("GetOrderDetails")]
     [SwaggerResponse(StatusCodes.Status200OK, null, typeof(List<GetOrderDetailsResponse>))]
-    public async Task<IActionResult> Get([FromQuery] GetOrderDetailsRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get(
+        [FromQuery] GetOrderDetailsRequest request,
+        CancellationToken cancellationToken
+    )
     {
         var response = await _mediator.Send(request, cancellationToken);
         return Ok(response);
@@ -49,7 +58,10 @@ public class OrdersController(IMediator mediator) : ControllerBase
     [HttpDelete("Delete")]
     [SwaggerResponse(StatusCodes.Status204NoContent, null)]
     [SwaggerResponse(StatusCodes.Status404NotFound, null, typeof(Error))]
-    public async Task<IActionResult> Delete(DeleteOrderRequest command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Delete(
+        DeleteOrderRequest command,
+        CancellationToken cancellationToken
+    )
     {
         var response = await _mediator.Send(command, cancellationToken);
 
@@ -58,5 +70,4 @@ public class OrdersController(IMediator mediator) : ControllerBase
 
         return NoContent();
     }
-
 }

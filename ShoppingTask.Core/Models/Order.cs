@@ -7,6 +7,5 @@ public class Order
     public decimal TotalAmount { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; } = null!;
-    public List<OrderItem> OrderItems { get; set; }  = new();
-   
+    public List<OrderItem> OrderItems { get; set; } = new();
 }

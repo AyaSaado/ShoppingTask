@@ -6,9 +6,7 @@ namespace ShoppingTask.Core;
 public class Profiler : Profile
 {
     public Profiler()
-    {  
-        CreateMap<OrderItem, OrderItemDTO>()
-       .ReverseMap();
-       
+    {
+        CreateMap<OrderItem, OrderItemDTO>().ReverseMap();
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace ShoppingTask.Domain.Auth;
+﻿namespace ShoppingTask.Domain.Auth;
 
 public class SignUpWithRoleRequest : IRequest<Result>
 {
@@ -12,10 +11,10 @@ public class SignUpWithRoleRequest : IRequest<Result>
         Role = role;
     }
 }
-public class SignUpRequest 
-{
-  public required string UserName { get; set; }
-  public required string Email { get; set; }
-  public required string Password { get; set; }
 
+public class SignUpRequest
+{
+    public required string UserName { get; set; }
+    public required string Email { get; set; }
+    public required string Password { get; set; }
 }

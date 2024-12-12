@@ -1,13 +1,11 @@
-using Swashbuckle.AspNetCore.SwaggerUI;
-using ShoppingTask.API.MiddelWares;
 using ShoppingTask.API;
-using ShoppingTask.Infrastructure;
-using ShoppingTask.Domain;
+using ShoppingTask.API.MiddelWares;
 using ShoppingTask.API.Seed;
 using ShoppingTask.Core;
+using ShoppingTask.Domain;
 using ShoppingTask.Domain.Hubs;
-
-
+using ShoppingTask.Infrastructure;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,12 +47,10 @@ app.Use(
     }
 );
 
-
 app.UseStaticFiles("/wwwroot");
 app.MapControllers();
 
-app.MapHub<CartHub>("/CartHub"); 
-
+app.MapHub<CartHub>("/CartHub");
 
 await SeedData.Seed(app);
 app.Run();

@@ -7,5 +7,4 @@ public class AddProductRequest : IRequest<Result>
     public decimal Price { get; set; }
     public decimal Stock { get; set; }
     public IFormFile? Image { get; set; }
-    
 }

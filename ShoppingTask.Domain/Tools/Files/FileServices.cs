@@ -5,6 +5,7 @@ namespace ShoppingTask.Domain.Tools.Files;
 public class FileServices : IFileServices
 {
     private readonly string _wwwroot;
+
     public FileServices(IWebHostEnvironment webHostEnvironment)
     {
         _wwwroot = webHostEnvironment.WebRootPath;

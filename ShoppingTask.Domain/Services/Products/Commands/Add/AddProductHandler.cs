@@ -1,9 +1,11 @@
 ﻿namespace ShoppingTask.Domain.Services.Products;
 
-public class AddProductHandler(IUnitOfWork unitOfWork , IFileServices fileServices) : IRequestHandler<AddProductRequest, Result>
+public class AddProductHandler(IUnitOfWork unitOfWork, IFileServices fileServices)
+    : IRequestHandler<AddProductRequest, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly IFileServices _fileServices = fileServices;
+
     public async Task<Result> Handle(AddProductRequest request, CancellationToken cancellationToken)
     {
         try
@@ -14,7 +16,7 @@ public class AddProductHandler(IUnitOfWork unitOfWork , IFileServices fileServic
                 Description = request.Description,
                 ImageUrl = await _fileServices.Upload(request.Image),
                 Price = request.Price,
-                Stock = request.Stock
+                Stock = request.Stock,
             };
 
             await _unitOfWork.Products.AddAsync(product);
@@ -26,7 +28,5 @@ public class AddProductHandler(IUnitOfWork unitOfWork , IFileServices fileServic
         {
             return Result.Failure(new Error("400", ex.Message));
         }
-
-
     }
 }

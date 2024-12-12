@@ -1,5 +1,4 @@
-﻿
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using ShoppingTask.Api.Controllers.Public;
@@ -27,10 +26,12 @@ public class TestOrdersController
         // Arrange
         var request = new GetAllByUserRequest();
         var response = new PaginationResponseDTO<GetAllByUserResponse>(
-        new List<GetAllByUserResponse> { new GetAllByUserResponse() },
-         1
+            new List<GetAllByUserResponse> { new GetAllByUserResponse() },
+            1
         );
-        _mediatorMock.Setup(m => m.Send(request, It.IsAny<CancellationToken>())).ReturnsAsync(response);
+        _mediatorMock
+            .Setup(m => m.Send(request, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
 
         // Act
         var result = await _ordersController.Get(request, CancellationToken.None) as OkObjectResult;
@@ -46,7 +47,9 @@ public class TestOrdersController
         // Arrange
         var request = new GetOrderDetailsRequest();
         var response = new List<GetOrderDetailsResponse>();
-        _mediatorMock.Setup(m => m.Send(request, It.IsAny<CancellationToken>())).ReturnsAsync(response);
+        _mediatorMock
+            .Setup(m => m.Send(request, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
 
         // Act
         var result = await _ordersController.Get(request, CancellationToken.None) as OkObjectResult;
@@ -59,7 +62,13 @@ public class TestOrdersController
     [Theory]
     [InlineData("2022-01-01", "26C88310-C18F-411E-EF0A-08DD1A130A64", 1, 10.99, 4)]
     [InlineData("2022-01-02", "26C88310-C18F-411E-EF0A-08DD1A130A64", 1, 3, 5.99, 4)]
-    public async Task Add_ReturnsCreatedResult(string date, string userId,  decimal orderItem1Quantity, decimal orderItem1Price, int orderItem1ProductId)
+    public async Task Add_ReturnsCreatedResult(
+        string date,
+        string userId,
+        decimal orderItem1Quantity,
+        decimal orderItem1Price,
+        int orderItem1ProductId
+    )
     {
         // Arrange
         var request = new AddOrderRequest
@@ -67,19 +76,21 @@ public class TestOrdersController
             Date = DateTime.Parse(date),
             UserId = Guid.Parse(userId),
             OrderItemDTOs = new List<OrderItemDTO>
-        {
-            new OrderItemDTO(0, orderItem1Quantity, orderItem1Price, orderItem1ProductId)    
-        }
+            {
+                new OrderItemDTO(0, orderItem1Quantity, orderItem1Price, orderItem1ProductId),
+            },
         };
 
         var result = Result.Success();
-        _mediatorMock.Setup(m => m.Send(It.IsAny<AddOrderRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(result);
+        _mediatorMock
+            .Setup(m => m.Send(It.IsAny<AddOrderRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(result);
 
         // Act
-        var response = await _ordersController.Add(request, CancellationToken.None) as CreatedResult;
+        var response =
+            await _ordersController.Add(request, CancellationToken.None) as CreatedResult;
 
         // Assert
         Assert.NotNull(response);
     }
-
 }

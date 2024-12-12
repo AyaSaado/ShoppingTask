@@ -1,16 +1,21 @@
-﻿
-namespace ShoppingTask.Domain.Services.Products;
+﻿namespace ShoppingTask.Domain.Services.Products;
 
-public class UpdateProductHandler(IUnitOfWork unitOfWork , IFileServices fileServices) : IRequestHandler<UpdateProductRequest, Result>
+public class UpdateProductHandler(IUnitOfWork unitOfWork, IFileServices fileServices)
+    : IRequestHandler<UpdateProductRequest, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IFileServices _fileServices = fileServices;    
-    public async Task<Result> Handle(UpdateProductRequest request, CancellationToken cancellationToken)
+    private readonly IFileServices _fileServices = fileServices;
+
+    public async Task<Result> Handle(
+        UpdateProductRequest request,
+        CancellationToken cancellationToken
+    )
     {
         try
         {
-            var product = await _unitOfWork.Products.GetOneAsync(p => p.Id == request.Id)
-                                         .FirstOrDefaultAsync(cancellationToken);
+            var product = await _unitOfWork
+                .Products.GetOneAsync(p => p.Id == request.Id)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (product == null)
                 return Result.Failure(new Error("404", "Product Not Found"));
@@ -20,7 +25,7 @@ public class UpdateProductHandler(IUnitOfWork unitOfWork , IFileServices fileSer
             product.Price = request.Price;
             product.Stock = request.Stock;
 
-           if(request.Image is not null)
+            if (request.Image is not null)
             {
                 _fileServices.Delete(product.ImageUrl);
 
@@ -30,13 +35,10 @@ public class UpdateProductHandler(IUnitOfWork unitOfWork , IFileServices fileSer
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
-
         }
         catch (Exception ex)
         {
             return Result.Failure(new Error("400", ex.Message));
         }
-
-
     }
 }

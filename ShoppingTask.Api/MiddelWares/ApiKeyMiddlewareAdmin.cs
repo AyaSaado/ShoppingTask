@@ -15,7 +15,7 @@ public class ApiKeyMiddlewareAdmin(RequestDelegate next)
         }
         var appSettings = context.RequestServices.GetRequiredService<IConfiguration>();
         var apiKey = appSettings.GetSection("APIKEY").GetValue<string>("Adminkey")!;
-       
+
         if (!apiKey.Equals(extractedApiKey))
         {
             context.Response.StatusCode = 401;
@@ -26,4 +26,3 @@ public class ApiKeyMiddlewareAdmin(RequestDelegate next)
         await _next(context);
     }
 }
-

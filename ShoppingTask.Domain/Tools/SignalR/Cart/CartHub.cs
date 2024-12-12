@@ -25,6 +25,7 @@ public class CartHub : Hub
             }
         }
     }
+
     public async Task AddItem(CartItem item)
     {
         var user = Context.User;
@@ -39,7 +40,6 @@ public class CartHub : Hub
                 await Clients.Caller.SendAsync("ItemAdded", item);
             }
         }
-       
     }
 
     public async Task UpdateItem(CartItem item)
@@ -56,7 +56,6 @@ public class CartHub : Hub
                 await Clients.Caller.SendAsync("ItemUpdated", item);
             }
         }
-      
     }
 
     public async Task RemoveItem(int productId)
@@ -73,6 +72,5 @@ public class CartHub : Hub
                 await Clients.Caller.SendAsync("ItemRemoved", productId);
             }
         }
-       
     }
 }

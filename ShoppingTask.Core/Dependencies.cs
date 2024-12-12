@@ -8,8 +8,6 @@ public static class Dependencies
 {
     public static IServiceCollection AddCore(this IServiceCollection services)
     {
-     
-        return  services.AddSingleton<ShoppingCart>()
-                        .AddAutoMapper(typeof(Profiler).Assembly);
+        return services.AddSingleton<ShoppingCart>().AddAutoMapper(typeof(Profiler).Assembly);
     }
 }

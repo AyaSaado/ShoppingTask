@@ -1,20 +1,23 @@
-﻿global using Microsoft.EntityFrameworkCore;
+﻿global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using ShoppingTask.Core.Models;
 global using ShoppingTask.Infrastructure.Data;
 global using ShoppingTask.Infrastructure.Repository.Base;
-global using ShoppingTask.Infrastructure.Repository.Users;
-global using Microsoft.AspNetCore.Identity;
 global using ShoppingTask.Infrastructure.Repository.UnitOfWork;
-global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using ShoppingTask.Infrastructure.Repository.Users;
 
 namespace ShoppingTask.Infrastructure;
 
 public static class Dependencies
 {
-    public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static void AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         bool isProduction =
             Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production";

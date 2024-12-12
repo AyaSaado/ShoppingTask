@@ -1,55 +1,78 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Identity;
 using ShoppingTask.Domain;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace ShoppingTask.Services.Auth
 {
-    
-    public class RefreshTokenHandler : IRequestHandler<RefreshTokenRequest, Result<TokenRequest.Respone>>
+    public class RefreshTokenHandler
+        : IRequestHandler<RefreshTokenRequest, Result<TokenRequest.Respone>>
     {
-       
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<User> _userManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly TokenServices _services;
-        public RefreshTokenHandler(TokenServices service, IJwtProvider jwtProvider, IUnitOfWork unitOfWork, UserManager<User> userManager, IOptions<JwtBearerOptions> jwtBearerOptions)
-        {
 
+        public RefreshTokenHandler(
+            TokenServices service,
+            IJwtProvider jwtProvider,
+            IUnitOfWork unitOfWork,
+            UserManager<User> userManager,
+            IOptions<JwtBearerOptions> jwtBearerOptions
+        )
+        {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _services = service;
             _tokenValidationParameters = jwtBearerOptions.Value.TokenValidationParameters;
+        }
 
-    }
-
-    public async Task<Result<TokenRequest.Respone>> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
+        public async Task<Result<TokenRequest.Respone>> Handle(
+            RefreshTokenRequest request,
+            CancellationToken cancellationToken
+        )
         {
             try
             {
                 var JwtTokenHandler = new JwtSecurityTokenHandler();
 
-                _tokenValidationParameters.ValidateLifetime = false; 
-                var TokenInVarification = JwtTokenHandler.ValidateToken(request.Token, _tokenValidationParameters, out var validatedToken);
+                _tokenValidationParameters.ValidateLifetime = false;
+                var TokenInVarification = JwtTokenHandler.ValidateToken(
+                    request.Token,
+                    _tokenValidationParameters,
+                    out var validatedToken
+                );
 
                 if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
-                    var result = jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
+                    var result = jwtSecurityToken.Header.Alg.Equals(
+                        SecurityAlgorithms.HmacSha256,
+                        StringComparison.InvariantCultureIgnoreCase
+                    );
 
                     if (result == false)
-                        return Result.Failure<TokenRequest.Respone>(new Error("400", "Invalid Token"));
+                        return Result.Failure<TokenRequest.Respone>(
+                            new Error("400", "Invalid Token")
+                        );
+                }
+                else
+                    return Result.Failure<TokenRequest.Respone>(
+                        new Error("400", "Invalid Request1")
+                    );
 
-                }else
-                    return Result.Failure<TokenRequest.Respone>(new Error("400", "Invalid Request1"));
-
-              
-                var StoredToken = await _unitOfWork.RefreshTokens.GetOneAsync(r => r.Token == request.RefreshToken).FirstOrDefaultAsync(cancellationToken);
+                var StoredToken = await _unitOfWork
+                    .RefreshTokens.GetOneAsync(r => r.Token == request.RefreshToken)
+                    .FirstOrDefaultAsync(cancellationToken);
 
                 if (StoredToken == null)
                 {
-                    return Result.Failure<TokenRequest.Respone>(new Error("400", "Invalid RefreshToken"));
+                    return Result.Failure<TokenRequest.Respone>(
+                        new Error("400", "Invalid RefreshToken")
+                    );
                 }
 
-                var jti = TokenInVarification.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)!.Value;
+                var jti = TokenInVarification
+                    .Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)!
+                    .Value;
 
                 if (StoredToken.JwtId != jti)
                 {
@@ -57,13 +80,16 @@ namespace ShoppingTask.Services.Auth
                 }
                 if (StoredToken.ExpiryDate < DateTime.UtcNow)
                 {
-                    return Result.Failure<TokenRequest.Respone>(new Error("400", "Expired RefreshToken"));
+                    return Result.Failure<TokenRequest.Respone>(
+                        new Error("400", "Expired RefreshToken")
+                    );
                 }
 
-                var user = await _unitOfWork.Users.GetOneAsync(u => u.Id == StoredToken.UserId).FirstOrDefaultAsync(cancellationToken);
-                                                 
+                var user = await _unitOfWork
+                    .Users.GetOneAsync(u => u.Id == StoredToken.UserId)
+                    .FirstOrDefaultAsync(cancellationToken);
 
-                if(user is null)
+                if (user is null)
                 {
                     return Result.Failure<TokenRequest.Respone>(new Error("400", "Not Found User"));
                 }
@@ -74,16 +100,11 @@ namespace ShoppingTask.Services.Auth
                 var roles = await _userManager.GetRolesAsync(user);
 
                 return await _services.GenerateToken(user, roles.ToList(), cancellationToken);
-
             }
             catch (Exception)
             {
                 return Result.Failure<TokenRequest.Respone>(new Error("400", "Invalid Request"));
             }
-
-
         }
-
-   
     }
 }

@@ -13,10 +13,9 @@ namespace ShoppingTask.API.Seed
             var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             var userManager = services.GetRequiredService<UserManager<User>>();
 
-            await SeedRoles(context, roleManager);  
-          
+            await SeedRoles(context, roleManager);
         }
-     
+
         private static async Task SeedRoles(
             AppDbContext context,
             RoleManager<IdentityRole<Guid>> roleManager
@@ -35,6 +34,5 @@ namespace ShoppingTask.API.Seed
             }
             await context.SaveChangesAsync();
         }
-
     }
 }

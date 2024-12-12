@@ -41,10 +41,7 @@ public class BaseRepository<T> : IBaseRepository<T>
         return item;
     }
 
-    public virtual IQueryable<T> Find(
-        Expression<Func<T, bool>> predicate,
-        bool noTracking = false
-    )
+    public virtual IQueryable<T> Find(Expression<Func<T, bool>> predicate, bool noTracking = false)
     {
         var query = GetAll().Where(predicate);
 

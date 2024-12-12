@@ -1,16 +1,13 @@
-﻿using ShoppingTask.Services.Auth;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
+using ShoppingTask.Services.Auth;
 
 namespace ShoppingTask.Domain
 {
-    public class TokenServices(
-        IUnitOfWork unitOfWork,
-        IJwtProvider jwtProvider
-    )
+    public class TokenServices(IUnitOfWork unitOfWork, IJwtProvider jwtProvider)
     {
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly IUnitOfWork _unitOfWork = unitOfWork;
-        
+
         public async Task<TokenRequest.Respone> GenerateToken(
             User user,
             List<string> roles,
@@ -33,7 +30,10 @@ namespace ShoppingTask.Domain
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return new TokenRequest.Respone()
-            { Token = new JwtSecurityTokenHandler().WriteToken(Token), RefreshToken = RefreshToken.Token };
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(Token),
+                RefreshToken = RefreshToken.Token,
+            };
         }
     }
 }

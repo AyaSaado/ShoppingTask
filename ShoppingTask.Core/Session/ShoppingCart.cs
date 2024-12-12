@@ -1,6 +1,5 @@
 ﻿namespace ShoppingTask.Core.Session;
 
-
 using Microsoft.Extensions.Caching.Memory;
 
 public class ShoppingCart
@@ -28,8 +27,9 @@ public class ShoppingCart
     {
         var cartItems = GetCartItems(userId);
         cartItems.Add(item);
-        var cacheEntryOptions = new MemoryCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromHours(1));
+        var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(
+            TimeSpan.FromHours(1)
+        );
         _cache.Set(userId, cartItems, cacheEntryOptions);
     }
 
@@ -41,8 +41,9 @@ public class ShoppingCart
         {
             existingItem.Quantity = item.Quantity;
         }
-        var cacheEntryOptions = new MemoryCacheEntryOptions()
-            .SetSlidingExpiration(TimeSpan.FromHours(1));
+        var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(
+            TimeSpan.FromHours(1)
+        );
         _cache.Set(userId, cartItems, cacheEntryOptions);
     }
 
@@ -59,14 +60,15 @@ public class ShoppingCart
             }
             else
             {
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromHours(1));
+                var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(
+                    TimeSpan.FromHours(1)
+                );
                 _cache.Set(userId, cartItems, cacheEntryOptions);
             }
         }
     }
-
 }
+
 public class CartItem
 {
     public int ProductId { get; set; }
