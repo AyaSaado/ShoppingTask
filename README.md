@@ -27,6 +27,7 @@ Here’s how the fire-and-forget mechanism is implemented in your code:
 // Fire and Forget Mechanism
 _ = SendOrderConfirmationEmailAsync(order, user.Email!);
 
+```
 ## Shopping Cart Functionality
 
 This project includes a real-time shopping cart feature implemented using SignalR and in-memory caching. The key components involved in this functionality are the `CartHub` class and the `ShoppingCart` class.
