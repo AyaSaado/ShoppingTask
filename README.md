@@ -1,6 +1,31 @@
 # ShoppingTaskApi
 
 
+## Fire and Forget Mechanism
+
+In the `AddOrderHandler` class, we utilize a "fire and forget" approach when sending order confirmation emails. This mechanism allows us to initiate an asynchronous operation without waiting for it to complete, ensuring that the main flow of the application remains responsive.
+
+### How Fire and Forget Works
+
+1. **Asynchronous Task Initiation:**  
+   When you call an asynchronous method, it starts executing in the background. For example, in your `AddOrderHandler`, the method `SendOrderConfirmationEmailAsync` is called to send an email.
+
+2. **Ignoring the Result:**  
+   By using the underscore (`_`) before the method call, you indicate that you do not care about the result of the task. This means the application will not wait for the email-sending process to finish before continuing with other operations.
+
+3. **Non-blocking Execution:**  
+   This approach allows the main method (`Handle`) to return immediately after starting the email process. The user receives a response without delay, improving the overall experience.
+
+4. **Error Handling:**  
+   Inside the `SendOrderConfirmationEmailAsync` method, any exceptions that occur while sending the email are caught and logged. This ensures that errors do not disrupt the main application flow.
+
+### Example Code
+
+Here’s how the fire-and-forget mechanism is implemented in your code:
+
+```csharp
+// Fire and Forget Mechanism
+_ = SendOrderConfirmationEmailAsync(order, user.Email!);
 
 ## Shopping Cart Functionality
 
