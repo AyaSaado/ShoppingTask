@@ -57,7 +57,7 @@ The `ShoppingCart` class is responsible for managing the shopping cart items in 
 #### Key Features:
 
 - **Caching:** The `ShoppingCart` class uses in-memory caching to store cart items for each user. The user's ID is used as the key to store and retrieve the cart itemsvand save it for (1 Day) then will be removed.
-
+    (But in production environment, we recommend using **Redis** instead)
 - **Methods:**
   - **GetCartItems:** Retrieves the cart items for a given user ID from the cache. If the items are not found in the cache, it returns an empty list.
   - **AddItem:** Adds a new item to the user's cart. It retrieves the current cart items, adds the new item, and updates the cache with the modified list. A sliding expiration of one hour is set for the cache entry.
